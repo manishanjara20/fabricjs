@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FabricJS Fashion Catalog</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js" integrity="sha512-koBmxRNgTRERKNRFP00RmdIhkSMN379GeISweUXmVf+gUbXPofaqs+h/nqLWDcAE9SH8VN2JBhp7StnlbkOWjw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    #catalogCanvas { border: 1px solid #ccc; }
+    #controls { margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h1>FabricJS Fashion Catalog</h1>
+  <canvas id="catalogCanvas" width="800" height="600"></canvas>
+  <div id="controls">
+    <button id="exportBtn">Export Image</button>
+  </div>
+
+  <script>
+    // Image URLs used to build the catalog. Replace these with your own images.
+    const imageSources = [
+      'https://via.placeholder.com/200x200.png?text=Item+1',
+      'https://via.placeholder.com/200x200.png?text=Item+2',
+      'https://via.placeholder.com/200x200.png?text=Item+3',
+      'https://via.placeholder.com/200x200.png?text=Item+4',
+      'https://via.placeholder.com/200x200.png?text=Item+5',
+      'https://via.placeholder.com/200x200.png?text=Item+6'
+    ];
+
+    const canvas = new fabric.Canvas('catalogCanvas', {
+      backgroundColor: '#fff'
+    });
+
+    const gridCols = 3;          // number of columns in the catalog grid
+    const cellWidth = 200;       // width of each cell
+    const cellHeight = 200;      // height of each cell
+    const padding = 20;          // space between cells
+
+    // Helper function to place images in a grid
+    function addImageToGrid(img, index) {
+      const col = index % gridCols;
+      const row = Math.floor(index / gridCols);
+      img.set({
+        left: col * (cellWidth + padding),
+        top: row * (cellHeight + padding),
+        selectable: false
+      });
+      img.scaleToWidth(cellWidth);
+      img.scaleToHeight(cellHeight);
+      canvas.add(img);
+    }
+
+    // Load each image and add it to the canvas
+    imageSources.forEach((src, index) => {
+      fabric.Image.fromURL(src, img => addImageToGrid(img, index), {crossOrigin: 'anonymous'});
+    });
+
+    // Export the canvas as a PNG
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      const dataURL = canvas.toDataURL({ format: 'png' });
+      const link = document.createElement('a');
+      link.href = dataURL;
+      link.download = 'catalog.png';
+      link.click();
+    });
+  </script>
+</body>
+</html>
