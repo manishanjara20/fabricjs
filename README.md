@@ -5,7 +5,7 @@ This repository demonstrates how to combine multiple product images into a singl
 ## Usage
 
 1. Open `catalog-generator.html` in a web browser. An internet connection is required to load the Fabric.js library from the CDN.
-2. Replace the placeholder image URLs in the script with your own product images.
+2. Use the **Choose Images** button to upload one or more product photos from your computer.
 3. Adjust the grid size or canvas dimensions if needed.
 4. Click **Export Image** to download the assembled catalog as a single PNG.
 

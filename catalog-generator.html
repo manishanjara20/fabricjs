@@ -15,19 +15,12 @@
   <h1>FabricJS Fashion Catalog</h1>
   <canvas id="catalogCanvas" width="800" height="600"></canvas>
   <div id="controls">
+    <input type="file" id="imageUpload" multiple accept="image/*">
     <button id="exportBtn">Export Image</button>
   </div>
 
   <script>
-    // Image URLs used to build the catalog. Replace these with your own images.
-    const imageSources = [
-      'https://via.placeholder.com/200x200.png?text=Item+1',
-      'https://via.placeholder.com/200x200.png?text=Item+2',
-      'https://via.placeholder.com/200x200.png?text=Item+3',
-      'https://via.placeholder.com/200x200.png?text=Item+4',
-      'https://via.placeholder.com/200x200.png?text=Item+5',
-      'https://via.placeholder.com/200x200.png?text=Item+6'
-    ];
+    let imageCount = 0;
 
     const canvas = new fabric.Canvas('catalogCanvas', {
       backgroundColor: '#fff'
@@ -52,9 +45,20 @@
       canvas.add(img);
     }
 
-    // Load each image and add it to the canvas
-    imageSources.forEach((src, index) => {
-      fabric.Image.fromURL(src, img => addImageToGrid(img, index), {crossOrigin: 'anonymous'});
+    // Handle image uploads
+    document.getElementById('imageUpload').addEventListener('change', (e) => {
+      const files = Array.from(e.target.files);
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          fabric.Image.fromURL(evt.target.result, img => {
+            addImageToGrid(img, imageCount++);
+          });
+        };
+        reader.readAsDataURL(file);
+      });
+      // clear input so the same files can be reselected if needed
+      e.target.value = '';
     });
 
     // Export the canvas as a PNG
